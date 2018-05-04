@@ -6,22 +6,30 @@ var app     = express();
 
 app.get('/scrape', function(req, res){
   // Let's scrape Anchorman 2
-//   url = 'http://www.imdb.com/title/tt1229340/';
-//   url = 'https://www.aparat.com/';
-  url = 'https://www.aparat.com//etc/api/mostviewedvideos';
+  // url = 'http://www.imdb.com/title/tt1229340/';
+  url = 'https://www.aparat.com/';
+  // url = 'https://www.aparat.com//etc/api/mostviewedvideos';
 
   request(url, function(error, response, html){
     if(!error){
       var $ = cheerio.load(html);
-      console.log($)
+      // console.log($)
+      // console.log(response.body)
 
       var title, release, rating;
-      var json = { title : "", release : "", rating : ""};
-
-      $('.title_wrapper').filter(function(){
+      var json = 
+      { title : "", release : "", rating : ""};
+      
+      //aparat
+      $("[data-ux='پربازدید‌ترین‌های امروز']").filter(function(){
+      // $('.video-item__title').filter(function(){
+        // $('.title_wrapper').filter(function(){
         var data = $(this);
-        title = data.children().first().text().trim();
-        release = data.children().last().children().last().text().trim();
+        console.log(data)
+        // title = data.children().first().text().trim();
+        title = data.children().children().children().toArray();
+        // title = data.children().children().children().first().text().trim();
+        release = data.children().children().children().last().children().last().text().trim();
 
         json.title = title;
         json.release = release;
